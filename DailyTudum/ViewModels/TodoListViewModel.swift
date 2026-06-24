@@ -10,7 +10,24 @@ import SwiftData
 
 @Observable
 final class TodoListViewModel {
+    enum FilterMode: String, CaseIterable {
+        case all = "All Tasks"
+        case today = "Today"
+    }
     var todos: [TodoItem] = []
+    var selectedFilter: FilterMode = .all
+
+    var filteredTodos: [TodoItem] {
+        switch selectedFilter {
+        case .all:
+            return todos
+        case .today:
+            return todos.filter { todo in
+                guard let dueDate = todo.dueDate else { return false }
+                return Calendar.current.isDateInToday(dueDate)
+            }
+        }
+    }
 
     func fetchTodos(modelContext: ModelContext) {
         let fetchDescriptor = FetchDescriptor<TodoItem>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)])

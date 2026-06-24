@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct DailyTudumApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTodoListView()
         }
+        .modelContainer(for: TodoItem.self)
     }
 }
